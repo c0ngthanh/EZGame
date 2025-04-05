@@ -26,12 +26,13 @@ public class PlayerInputController : MonoBehaviour
     private void SetDirection(InputAction.CallbackContext context)
     {
         direction = context.ReadValue<Vector2>();
-        animationController.SetBool("Move", true);
+        // animationController.SetBool("Move", true);
+        transform.rotation = Quaternion.Euler(Vector3.zero);
     }
     private void ResetDirection(InputAction.CallbackContext context)
     {
         direction = Vector2.zero;
-        animationController.SetBool("Move", false);
+        // animationController.SetBool("Move", false);
     }
 
     void OnEnable()
@@ -49,5 +50,6 @@ public class PlayerInputController : MonoBehaviour
     {
         direction = direction.normalized;
         rb.velocity = new Vector3(direction.x * speed, 0, direction.y * speed);
+        transform.rotation = Quaternion.Euler(Vector3.zero);
     }
 }
