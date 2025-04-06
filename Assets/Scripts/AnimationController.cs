@@ -9,6 +9,7 @@ public class AnimationController : MonoBehaviour
     public void Awake()
     {
         hashTable["Move"] = Animator.StringToHash("Move");
+        hashTable["Attack"] = Animator.StringToHash("Attack");
     }
     public void SetBool(string key, bool value)
     {

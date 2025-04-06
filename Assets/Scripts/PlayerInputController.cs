@@ -11,6 +11,7 @@ public class PlayerInputController : MonoBehaviour
     private Vector2 direction;
     private Vector3 cacheDirection;
     private Rigidbody rb;
+    private BaseUnit baseUnit;
     private int speed =5;
     // Start is called before the first frame update
     void Awake()
@@ -22,18 +23,21 @@ public class PlayerInputController : MonoBehaviour
         controls.PlayerControl.Move.canceled += ResetDirection;
         rb = GetComponent<Rigidbody>();
         animationController = GetComponent<AnimationController>();
+        baseUnit = GetComponent<BaseUnit>();
     }
 
     private void SetDirection(InputAction.CallbackContext context)
     {
         direction = context.ReadValue<Vector2>().normalized;
         animationController.SetBool("Move", true);
+        baseUnit.SetBaseUnitState(BaseUnitState.Move);
         cacheDirection = new Vector3(direction.x, 0, direction.y);
     }
     private void ResetDirection(InputAction.CallbackContext context)
     {
         direction = Vector2.zero;
         animationController.SetBool("Move", false);
+        baseUnit.SetBaseUnitState(BaseUnitState.Idle);
     }
 
     void OnEnable()
