@@ -1,17 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInputController : MonoBehaviour
 {
     [SerializeField] PlayerInputAction controls;
-    [SerializeField] AnimationController animationController;
+    // [SerializeField] AnimationController animationController;
     private Vector2 direction;
     private Vector3 cacheDirection;
     private Rigidbody rb;
-    private BaseUnit baseUnit;
+    private Unit baseUnit;
     private int speed =5;
     // Start is called before the first frame update
     void Awake()
@@ -22,22 +19,20 @@ public class PlayerInputController : MonoBehaviour
         controls.PlayerControl.Move.performed += SetDirection;
         controls.PlayerControl.Move.canceled += ResetDirection;
         rb = GetComponent<Rigidbody>();
-        animationController = GetComponent<AnimationController>();
-        baseUnit = GetComponent<BaseUnit>();
+        // animationController = GetComponent<AnimationController>();
+        baseUnit = GetComponent<Unit>();
     }
 
     private void SetDirection(InputAction.CallbackContext context)
     {
         direction = context.ReadValue<Vector2>().normalized;
-        animationController.SetBool("Move", true);
-        baseUnit.SetBaseUnitState(BaseUnitState.Move);
+        baseUnit.SwitchState(baseUnit.unitMoveState);
         cacheDirection = new Vector3(direction.x, 0, direction.y);
     }
     private void ResetDirection(InputAction.CallbackContext context)
     {
         direction = Vector2.zero;
-        animationController.SetBool("Move", false);
-        baseUnit.SetBaseUnitState(BaseUnitState.Idle);
+        baseUnit.SwitchState(baseUnit.unitIdleState);
     }
 
     void OnEnable()
