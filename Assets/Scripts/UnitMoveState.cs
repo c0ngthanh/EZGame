@@ -13,6 +13,11 @@ public class UnitMoveState : UnitBaseState
         Debug.Log("Exit Move State");
     }
 
+    public override void FixedUpdateState(Unit unit)
+    {
+        unit.SetVelocity();
+    }
+
     public override void UpdateState(Unit unit)
     {
     }

@@ -13,6 +13,10 @@ public class UnitAttackState : UnitBaseState
         Debug.Log("Exit Attack State");
     }
 
+    public override void FixedUpdateState(Unit unit)
+    {
+    }
+
     public override void UpdateState(Unit unit)
     {
     }
