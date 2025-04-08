@@ -1,10 +1,16 @@
 using UnityEngine;
 
-public class AnimationTriggerEvent
+public class AnimationTriggerEvent : MonoBehaviour
 {
-    public Unit baseUnit;
+    [SerializeField] private Unit unit;
     public void OnAttackComplete()
     {
-        Debug.Log("Attack Complete");
+        if(!unit.CheckIfCanAttack()){
+            unit.SwitchState(unit.unitIdleState);
+        }
+    }
+    public void OnAttackHit()
+    {
+        unit.unitAttackState.DealDamage(unit);
     }
 }

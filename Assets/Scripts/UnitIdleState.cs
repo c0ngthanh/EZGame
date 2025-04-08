@@ -12,7 +12,6 @@ public class UnitIdleState : UnitBaseState
 
     public override void ExitState(Unit unit)
     {
-        Debug.Log("Exit Idle State");
     }
 
     public override void FixedUpdateState(Unit unit)
@@ -21,9 +20,7 @@ public class UnitIdleState : UnitBaseState
 
     public override void UpdateState(Unit unit)
     {
-        Collider[] colliders =  Physics.OverlapBox(unit.attackRange.transform.position, unit.attackRange.size/2, Quaternion.identity,LayerMask.GetMask("Unit"));
-        if(colliders.Length > 1)
-        {
+        if(unit.CheckIfCanAttack()){
             unit.SwitchState(unit.unitAttackState);
         }
     }

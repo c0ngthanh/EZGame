@@ -10,7 +10,7 @@ public class UnitMoveState : UnitBaseState
 
     public override void ExitState(Unit unit)
     {
-        Debug.Log("Exit Move State");
+        // Debug.Log("Exit Move State");
     }
 
     public override void FixedUpdateState(Unit unit)
