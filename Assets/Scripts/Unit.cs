@@ -76,17 +76,17 @@ public class Unit : MonoBehaviour
         // Collider[] colliders =  Physics.OverlapBox(transform.TransformPoint(attackRange.transform.position), attackRange.size/2, Quaternion.identity,LayerMask.GetMask("Unit"));
         Vector3 boxCenter = transform.TransformPoint(attackRange.center);
         Vector3 boxSize = attackRange.size / 2;
-        // Debug.Log(transform + " " + boxCenter);
-    
+        Quaternion boxRotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+
         // Perform the OverlapBox check
         Collider[] colliders = Physics.OverlapBox(
             boxCenter,
             boxSize,
-            Quaternion.Euler(transform.forward),
+            boxRotation,
             LayerMask.GetMask("Unit")
         );
-        Debug.Log(transform + " " + transform.forward);
-        DebugDrawBox(boxCenter, boxSize, Quaternion.Euler(transform.forward), Color.red);
+        // Debug.Log(transform + " " + transform.forward);
+        DebugDrawBox(boxCenter, boxSize, boxRotation, Color.red);
         if (colliders.Length > 1)
         {
             return true;

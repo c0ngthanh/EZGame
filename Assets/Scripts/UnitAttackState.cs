@@ -21,7 +21,17 @@ public class UnitAttackState : UnitBaseState
     }
     public void DealDamage(Unit unit)
     {
-        Collider[] colliders =  Physics.OverlapBox(unit.attackRange.transform.position, unit.attackRange.size/2, Quaternion.identity,LayerMask.GetMask("Unit"));
+        Vector3 boxCenter = unit.transform.TransformPoint(unit.attackRange.center);
+        Vector3 boxSize = unit.attackRange.size / 2;
+        Quaternion boxRotation = Quaternion.Euler(0, unit.transform.eulerAngles.y, 0);
+
+        // Perform the OverlapBox check
+        Collider[] colliders = Physics.OverlapBox(
+            boxCenter,
+            boxSize,
+            boxRotation,
+            LayerMask.GetMask("Unit")
+        );
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject != unit.gameObject)
