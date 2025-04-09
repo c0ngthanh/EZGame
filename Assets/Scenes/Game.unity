@@ -505,6 +505,60 @@ PrefabInstance:
       addedObject: {fileID: 1080867531}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1dba841203c087e43afdd8fbe5b67c4e, type: 3}
+--- !u!1 &892755542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 892755544}
+  - component: {fileID: 892755543}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &892755543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892755542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b33f34658e989a4888fa11d6341aff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levels:
+  - {fileID: 11400000, guid: 7864a11fca9cd734ca8d2d6ea8b56af4, type: 2}
+  - {fileID: 11400000, guid: e0c952e0d4a519f4dac06d399ce93ac6, type: 2}
+  - {fileID: 11400000, guid: f82a2db10c1b7d748bd7e5d9fcc52db5, type: 2}
+  units:
+  - {fileID: 11400000, guid: 1baf6f620d3e5874b8c74eed961c2668, type: 2}
+  - {fileID: 11400000, guid: a7527a719ebe0f24294c488f28e7d166, type: 2}
+  - {fileID: 11400000, guid: 5c6fe4ec68fe9774bb6bde19f3ea3ace, type: 2}
+  - {fileID: 11400000, guid: 2f552b359f6ec0e4daee7ff5b66bdaef, type: 2}
+  - {fileID: 11400000, guid: 515bc2ed06fdc724bb47df9d498ec0e3, type: 2}
+--- !u!4 &892755544
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892755542}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1080867531 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2363000861716586399, guid: cb109f885edb33e42a65d4e9f6f8d16f, type: 3}
@@ -1006,3 +1060,4 @@ SceneRoots:
   - {fileID: 1648288589}
   - {fileID: 1607950202}
   - {fileID: 1406787672}
+  - {fileID: 892755544}

@@ -6,5 +6,5 @@ using UnityEngine;
 public class LevelSO : ScriptableObject
 {
     // Increase % from base level
-    public int[] levelPercent = new int[10];
+    public float[] levelPercent = new float[10];
 }
