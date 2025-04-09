@@ -5,7 +5,7 @@ public class UnitAttackState : UnitBaseState
     private int attackHash = Animator.StringToHash("Attack");
     public override void EnterState(Unit unit)
     {
-        unit.PlayAnimation(Animator.StringToHash("Attack")); 
+        unit.PlayAnimation(attackHash); 
     }
 
     public override void ExitState(Unit unit)

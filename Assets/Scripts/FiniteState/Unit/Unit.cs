@@ -86,7 +86,7 @@ public class Unit : MonoBehaviour
             LayerMask.GetMask("Unit")
         );
         // Debug.Log(transform + " " + transform.forward);
-        DebugDrawBox(boxCenter, boxSize, boxRotation, Color.red);
+        // DebugDrawBox(boxCenter, boxSize, boxRotation, Color.red);
         if (colliders.Length > 1)
         {
             return true;

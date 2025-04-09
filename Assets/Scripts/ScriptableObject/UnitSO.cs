@@ -12,11 +12,11 @@ public class UnitSO : ScriptableObject
 }
 public enum EnemyType
 {
-    Normal,
-    Fast,
-    Strong,
-    Tanky,
-    Perfect
+    Normal=0,
+    Fast=1,
+    Strong=2,
+    Tanky=3,
+    Perfect=4
 }
 // Try add attack speed if possible
 public class UnitBaseAttribute{

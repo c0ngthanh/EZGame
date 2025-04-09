@@ -1,23 +1,53 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    public static LevelManager instance;
     public LevelSO[] levels;
     public UnitSO[] units;
-    public Dictionary<UnitSO, UnitAttriBute> unitDictionary = new Dictionary<UnitSO, UnitAttriBute>();
+    public UnitAttriBute[][][] levelList; // Gamemode, Level, Unit
     private float underRandomScale = 0.9f;
     private float upperRandomScale = 1.1f;
-    private int currentLevel = 0;
-    public void CalculateLevelAttributes()
+    private void Awake()
     {
-        for(int i = 0; i < units.Length; i++)
+        if (instance == null)
         {
-            float health = UnitBaseAttribute.health * levels[currentLevel].levelPercent[currentLevel] * units[i].healthScale * Random.Range(underRandomScale, upperRandomScale);
-            float speed = UnitBaseAttribute.speed * levels[currentLevel].levelPercent[currentLevel] * units[i].speedScale * Random.Range(underRandomScale, upperRandomScale);
-            float damage = UnitBaseAttribute.damage * levels[currentLevel].levelPercent[currentLevel] * units[i].damageScale * Random.Range(underRandomScale, upperRandomScale);
-            unitDictionary[units[i]] = new UnitAttriBute(health, speed, damage);
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        levelList = new UnitAttriBute[Enum.GetNames(typeof(GameMode)).Length][][];
+        int totalGameMode = Enum.GetNames(typeof(GameMode)).Length;
+        int totalLevel = levels.Length;
+        for (int i = 0; i < totalGameMode; i++)
+        {
+            levelList[i] = new UnitAttriBute[totalLevel][];
+            for (int j = 0; j < totalLevel; j++)
+            {
+                levelList[i][j] = new UnitAttriBute[units.Length];
+            }
+        }
+    }
+    public UnitAttriBute GetUnitData(int gamemode,int level, int enemyType)
+    {
+        if(levelList[gamemode][level][enemyType] == null){
+            levelList[gamemode][level][enemyType] = CreateUnitAttribute(gamemode, level, enemyType);
+        }
+        return levelList[gamemode][level][enemyType];
+    }
+    private UnitAttriBute CreateUnitAttribute(int gamemode,int level, int enemyType)
+    {
+        UnitSO unitSO = units[enemyType];
+        float health = UnitBaseAttribute.health * unitSO.healthScale * UnityEngine.Random.Range(underRandomScale, upperRandomScale);
+        float speed = UnitBaseAttribute.speed * unitSO.speedScale * UnityEngine.Random.Range(underRandomScale, upperRandomScale);
+        float damage = UnitBaseAttribute.damage * unitSO.damageScale * UnityEngine.Random.Range(underRandomScale, upperRandomScale);
+        return new UnitAttriBute(health, speed, damage);
     }
 }
