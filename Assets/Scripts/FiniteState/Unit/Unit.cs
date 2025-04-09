@@ -2,19 +2,24 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum Faction{
+    Player,
+    Enemy
+}
 public class Unit : MonoBehaviour
 {
     #region Unit Attribute
-    public int Speed = 1;
-    public int HP { get; private set; } = 100;
-    public int Damage { get; private set; } = 10;
-    public int HPMax { get; private set; } = 100;
+    public float Speed = 1;
+    public float HP { get; private set; } = 100;
+    public float Damage { get; private set; } = 10;
+    public float HPMax { get; private set; } = 100;
     #endregion Unit Attribute
     UnitBaseState currentState;
     public UnitIdleState unitIdleState = new UnitIdleState();
     public UnitMoveState unitMoveState = new UnitMoveState();
     public UnitAttackState unitAttackState = new UnitAttackState();
     public BoxCollider attackRange;
+    public Faction faction;
     private Vector3 direction;
     private Rigidbody rb;
     public EventHandler<float> onUnitAttacked;
@@ -93,7 +98,7 @@ public class Unit : MonoBehaviour
         }
         return false;
     }
-    public void OnReceiveDamege(int damage)
+    public void OnReceiveDamege(float damage)
     {
         HP -= damage;
         onUnitAttacked?.Invoke(this, HP / (float)HPMax);
@@ -101,6 +106,15 @@ public class Unit : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+    public void SetUnitAttribute(UnitAttriBute unitAttribute)
+
+    {
+        Speed = unitAttribute.GetSpeed();
+        HP = unitAttribute.GetHealth();
+        HPMax = unitAttribute.GetHealth();
+        Damage = unitAttribute.GetDamage();
+        onUnitAttacked?.Invoke(this, HP / (float)HPMax);
     }
     private void DebugDrawBox(Vector3 center, Vector3 halfExtents, Quaternion rotation, Color color)
     {

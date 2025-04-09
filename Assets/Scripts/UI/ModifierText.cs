@@ -7,6 +7,7 @@ public class ModifierText : MonoBehaviour
 {
     public Button left;
     public Button right;
+    public MainUI mainUI;
     private Text _text;
     private string[] strings;
     private int currentIndex;
@@ -19,6 +20,7 @@ public class ModifierText : MonoBehaviour
     private void ShowString(int value)
     {
         currentIndex = (currentIndex + value+strings.Length) % strings.Length;
+        mainUI.ShowPreviewInfo();
         _text.text = strings[currentIndex];
     }
     public void SetStrings(string[] strings)
@@ -30,5 +32,9 @@ public class ModifierText : MonoBehaviour
         this.strings = strings;
         currentIndex = 0;
         _text.text = strings[currentIndex];
+    }
+    public int GetCurrentIndex()
+    {
+        return currentIndex;
     }
 }
