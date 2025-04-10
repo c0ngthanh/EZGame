@@ -109,6 +109,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1753287134104261802, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
+      propertyPath: faction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753287134104261802, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 2970787681223179924}

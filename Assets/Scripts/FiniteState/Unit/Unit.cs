@@ -114,7 +114,6 @@ public class Unit : MonoBehaviour
         HP = unitAttribute.GetHealth();
         HPMax = unitAttribute.GetHealth();
         Damage = unitAttribute.GetDamage();
-        onUnitAttacked?.Invoke(this, HP / (float)HPMax);
     }
     private void DebugDrawBox(Vector3 center, Vector3 halfExtents, Quaternion rotation, Color color)
     {

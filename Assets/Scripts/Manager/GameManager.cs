@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public enum GameMode
 {
@@ -76,16 +77,25 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game scene loaded successfully!");
         gameState = GameState.Play;
-        // playerUnits = new Unit[playerTeammateCount];
         // enemyUnits = new Unit[enemyCount];
-        // for(int i = 0; i < playerTeammateCount + 1; i++)
-        // {
-        //     playerUnits[i] = CreateUnit(Faction.Player, playerType, i);
-        // }
         UnitAttriBute unitAttriBute = LevelManager.instance.GetPlayerData(playerType);
-        TryToSpawnUnit(unitAttriBute.GetFaction(), new Vector3(0, 200, 0));
+        GameObject player = TryToSpawnUnit(unitAttriBute.GetFaction(), new Vector3(0, 200, 0));
+        if(player != null)
+        {
+            player.AddComponent<PlayerInputController>();
+            player.GetComponent<Unit>().SetUnitAttribute(unitAttriBute);
+        }
+        playerUnits = new Unit[playerTeammateCount];
+        for(int i = 0; i < playerTeammateCount; i++)
+        {
+            UnitAttriBute unitAttribute = LevelManager.instance.GetUnitData(gamemode, level, getRandomUnitType());
+            playerUnits[i] = TryToSpawnUnit(Faction.Player, new Vector3(0, 200, 1 + i)).GetComponent<Unit>();
+            playerUnits[i].SetUnitAttribute(unitAttribute);
+            playerUnits[i].gameObject.AddComponent<AIController>();
+        }
+        
     }
-    private bool TryToSpawnUnit(Faction faction, Vector3 position)
+    private GameObject TryToSpawnUnit(Faction faction, Vector3 position)
     {
         if (Physics.Raycast(position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
         {
@@ -96,9 +106,14 @@ public class GameManager : MonoBehaviour
                 unit.SetActive(true);
                 unit.transform.SetParent(null);
                 unit.transform.position = hit.point;
-                return true;
+                return unit;
             }
         }
-        return false;
+        return null;
+    }
+    private int getRandomUnitType()
+    {
+        int randomIndex = Random.Range(0, LevelManager.instance.units.Length);
+        return randomIndex;
     }
 }
