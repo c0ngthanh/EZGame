@@ -14,12 +14,13 @@ public enum GameMode
 public enum GameState
 {
     Waiting,
-    Play
+    Play,
+    Testing
 }
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    private GameState gameState;
+    public GameState gameState;
     public Unit playerUnits;
     public Unit[] playerTeamMateUnits;
     public Unit[] enemyUnits;
@@ -42,7 +43,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        gameState = GameState.Waiting;
+        gameState = GameState.Waiting;       
+        QualitySettings.vSyncCount = 0;
+		Application.targetFrameRate = 200;
     }
     public void SetData(int gamemode, int level, int playerType, int enemyCount, int playerTeammateCount)
     {
@@ -189,5 +192,11 @@ public class GameManager : MonoBehaviour
             }
             OnResultEvent?.Invoke(this, true);
         }
+    }
+
+    public void StartTesting()
+    {
+        gameState = GameState.Testing;
+        SceneManager.LoadScene("50Unit");
     }
 }

@@ -11,6 +11,7 @@ public class ResultPanel : MonoBehaviour
     void Start()
     {
         mainMenuBtn.onClick.AddListener(() => {
+            SoundManager.instance.PlayMainSceneMusic();
             GameManager.instance.GoToMainMenu();
         });
         GameManager.instance.OnResultEvent += ShowResult;

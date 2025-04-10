@@ -11,6 +11,8 @@ public class AnimationTriggerEvent : MonoBehaviour
     }
     public void OnAttackHit()
     {
-        unit.unitAttackState.DealDamage(unit);
+        if(unit!=null){
+            unit.unitAttackState.DealDamage(unit);
+        }
     }
 }

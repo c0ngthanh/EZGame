@@ -15,4 +15,4 @@ MonoBehaviour:
   enemyType: 2
   healthScale: 1
   speedScale: 0.5
-  damageScale: 2
+  damageScale: 1.5

@@ -43,7 +43,9 @@ public class UnitAttackState : UnitBaseState
                 {
                     // Debug.Log("Hit " + collider.gameObject.name);
                     // Apply damage to the enemy unit
-                    collider.gameObject.GetComponent<Unit>().OnReceiveDamege(unit.Damage);
+                    if(GameManager.instance.gameState != GameState.Testing){
+                        collider.gameObject.GetComponent<Unit>().OnReceiveDamege(unit.Damage);
+                    }
                 }
             }
         }

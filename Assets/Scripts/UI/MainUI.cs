@@ -13,12 +13,18 @@ public class MainUI : MonoBehaviour
     [SerializeField] private BaseInfo enemyInfo;
     [SerializeField] private BaseInfo playerInfo;
     [SerializeField] private Button goBtn;
+    [SerializeField] private Button _50UnitBtn;
     void Awake()
     {
         goBtn.onClick.AddListener(() => {
             GameManager.instance.SetData(gameModeText.GetCurrentIndex(), levelText.GetCurrentIndex(), playerTypeText.GetCurrentIndex(),
             LevelManager.instance.GetEnemyCount(gameModeText.GetCurrentIndex(), levelText.GetCurrentIndex()),gameModeText.GetCurrentIndex() == 2 ? 2 : 0);
             GameManager.instance.StartGame();
+            SoundManager.instance.PlayInGameMusic();
+        });
+        _50UnitBtn.onClick.AddListener(() => {
+            GameManager.instance.StartTesting();
+            SoundManager.instance.PlayInGameMusic();
         });
     }
     void Start()
