@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum Faction{
+public enum Faction
+{
     Player,
     Enemy
 }
@@ -18,7 +19,7 @@ public class Unit : MonoBehaviour
     public UnitIdleState unitIdleState = new UnitIdleState();
     public UnitMoveState unitMoveState = new UnitMoveState();
     public UnitAttackState unitAttackState = new UnitAttackState();
-    public BoxCollider attackRange;
+    public SphereCollider attackRange;
     public Faction faction;
     private Vector3 direction;
     private Rigidbody rb;
@@ -29,10 +30,17 @@ public class Unit : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-    private void Start()
+    // private void Start()
+    // {
+    //     currentState = unitIdleState;
+    //     currentState.EnterState(this);
+    //     direction = Vector3.forward;
+    // }
+    private void OnEnable()
     {
         currentState = unitIdleState;
         currentState.EnterState(this);
+        direction = Vector3.forward;
     }
     public void SwitchState(UnitBaseState newState)
     {
@@ -79,22 +87,32 @@ public class Unit : MonoBehaviour
     public bool CheckIfCanAttack()
     {
         // Collider[] colliders =  Physics.OverlapBox(transform.TransformPoint(attackRange.transform.position), attackRange.size/2, Quaternion.identity,LayerMask.GetMask("Unit"));
-        Vector3 boxCenter = transform.TransformPoint(attackRange.center);
-        Vector3 boxSize = attackRange.size / 2;
-        Quaternion boxRotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        Vector3 boxCenter = transform.position + direction*0.3f + new Vector3(0,0.5f,0);
+        float radius = attackRange.radius;
+        // Vector3 boxSize = attackRange.size / 2;
+        // Quaternion boxRotation = attackRange.transform.rotation;
+        // Debug.Log(boxCenter + " " + boxSize + " " + boxRotation);
+
 
         // Perform the OverlapBox check
-        Collider[] colliders = Physics.OverlapBox(
+        Collider[] colliders = Physics.OverlapSphere(
             boxCenter,
-            boxSize,
-            boxRotation,
+            radius,
             LayerMask.GetMask("Unit")
         );
         // Debug.Log(transform + " " + transform.forward);
-        // DebugDrawBox(boxCenter, boxSize, boxRotation, Color.red);
-        if (colliders.Length > 1)
+        DebugDrawSphere(boxCenter, radius, Color.red);
+        foreach (Collider collider in colliders)
         {
-            return true;
+            if (collider.gameObject != gameObject && collider.TryGetComponent<Unit>(out Unit checkUnit))
+            {
+                if (checkUnit.faction != faction)
+                {
+                    // Debug.Log("Hit " + collider.gameObject.name);
+                    // Apply damage to the enemy unit
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -105,6 +123,7 @@ public class Unit : MonoBehaviour
         if (HP <= 0)
         {
             gameObject.SetActive(false);
+            GameManager.instance.CheckGameOver();
         }
     }
     public void SetUnitAttribute(UnitAttriBute unitAttribute)
@@ -114,6 +133,7 @@ public class Unit : MonoBehaviour
         HP = unitAttribute.GetHealth();
         HPMax = unitAttribute.GetHealth();
         Damage = unitAttribute.GetDamage();
+        onUnitAttacked?.Invoke(this, HP / (float)HPMax);
     }
     private void DebugDrawBox(Vector3 center, Vector3 halfExtents, Quaternion rotation, Color color)
     {
@@ -141,5 +161,43 @@ public class Unit : MonoBehaviour
         Debug.DrawLine(corners[1], corners[5], color);
         Debug.DrawLine(corners[2], corners[6], color);
         Debug.DrawLine(corners[3], corners[7], color);
+    }
+    private void DebugDrawSphere(Vector3 center, float radius, Color color, int segments = 36)
+    {
+        // Draw a circle in the XZ plane
+        for (int i = 0; i < segments; i++)
+        {
+            float angle1 = (i * Mathf.PI * 2) / segments;
+            float angle2 = ((i + 1) * Mathf.PI * 2) / segments;
+
+            Vector3 point1 = center + new Vector3(Mathf.Cos(angle1), 0, Mathf.Sin(angle1)) * radius;
+            Vector3 point2 = center + new Vector3(Mathf.Cos(angle2), 0, Mathf.Sin(angle2)) * radius;
+
+            Debug.DrawLine(point1, point2, color);
+        }
+
+        // Draw a circle in the XY plane
+        for (int i = 0; i < segments; i++)
+        {
+            float angle1 = (i * Mathf.PI * 2) / segments;
+            float angle2 = ((i + 1) * Mathf.PI * 2) / segments;
+
+            Vector3 point1 = center + new Vector3(Mathf.Cos(angle1), Mathf.Sin(angle1), 0) * radius;
+            Vector3 point2 = center + new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2), 0) * radius;
+
+            Debug.DrawLine(point1, point2, color);
+        }
+
+        // Draw a circle in the YZ plane
+        for (int i = 0; i < segments; i++)
+        {
+            float angle1 = (i * Mathf.PI * 2) / segments;
+            float angle2 = ((i + 1) * Mathf.PI * 2) / segments;
+
+            Vector3 point1 = center + new Vector3(0, Mathf.Cos(angle1), Mathf.Sin(angle1)) * radius;
+            Vector3 point2 = center + new Vector3(0, Mathf.Cos(angle2), Mathf.Sin(angle2)) * radius;
+
+            Debug.DrawLine(point1, point2, color);
+        }
     }
 }

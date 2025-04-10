@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,13 +20,17 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private GameState gameState;
-    public Unit[] playerUnits;
+    public Unit playerUnits;
+    public Unit[] playerTeamMateUnits;
     public Unit[] enemyUnits;
     private int gamemode;
     private int level;
     private int playerType;
     private int enemyCount;
     private int playerTeammateCount;
+    private Vector3 spawnPosition1 = new Vector3(0, 200, -1.5f);
+    private Vector3 spawnPosition2 = new Vector3(0, 200, 1.5f);
+    public EventHandler<bool> OnResultEvent;
     private void Awake()
     {
         if (instance == null)
@@ -79,21 +84,27 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Play;
         // enemyUnits = new Unit[enemyCount];
         UnitAttriBute unitAttriBute = LevelManager.instance.GetPlayerData(playerType);
-        GameObject player = TryToSpawnUnit(unitAttriBute.GetFaction(), new Vector3(0, 200, 0));
-        if(player != null)
+        playerUnits = TryToSpawnUnit(unitAttriBute.GetFaction(), spawnPosition1).GetComponent<Unit>();
+        if(playerUnits != null)
         {
-            player.AddComponent<PlayerInputController>();
-            player.GetComponent<Unit>().SetUnitAttribute(unitAttriBute);
+            playerUnits.gameObject.AddComponent<PlayerInputController>();
+            playerUnits.GetComponent<AIController>().enabled = false;
+            playerUnits.GetComponent<Unit>().SetUnitAttribute(unitAttriBute);
         }
-        playerUnits = new Unit[playerTeammateCount];
+        playerTeamMateUnits = new Unit[playerTeammateCount];
         for(int i = 0; i < playerTeammateCount; i++)
         {
             UnitAttriBute unitAttribute = LevelManager.instance.GetUnitData(gamemode, level, getRandomUnitType());
-            playerUnits[i] = TryToSpawnUnit(Faction.Player, new Vector3(0, 200, 1 + i)).GetComponent<Unit>();
-            playerUnits[i].SetUnitAttribute(unitAttribute);
-            playerUnits[i].gameObject.AddComponent<AIController>();
+            playerTeamMateUnits[i] = TryToSpawnUnit(Faction.Player, GetRandomSpawnPositionXZ(spawnPosition1,i,playerTeammateCount)).GetComponent<Unit>();
+            playerTeamMateUnits[i].SetUnitAttribute(unitAttribute);
         }
-        
+        enemyUnits = new Unit[enemyCount];
+        for (int i = 0; i < enemyCount; i++)
+        {
+            UnitAttriBute unitAttribute = LevelManager.instance.GetUnitData(gamemode, level, getRandomUnitType());
+            enemyUnits[i] = TryToSpawnUnit(Faction.Enemy, GetRandomSpawnPositionXZ(spawnPosition2,i,enemyCount)).GetComponent<Unit>();
+            enemyUnits[i].SetUnitAttribute(unitAttribute);
+        }
     }
     private GameObject TryToSpawnUnit(Faction faction, Vector3 position)
     {
@@ -111,9 +122,72 @@ public class GameManager : MonoBehaviour
         }
         return null;
     }
+    private Vector3 GetRandomSpawnPositionXZ(Vector3 center, int positionIndex, int positionCount)
+    {
+        int ring = 0;
+        int currentIndex = 0;
+        float ringSize = 1f;
+        while (currentIndex < positionCount)
+        {
+            int ringPositionCount = 3 + 2 * ring; // Number of positions in the current ring
+
+            for (int i = 0; i < ringPositionCount; i++)
+            {
+                float angle = i * Mathf.PI * 2 / ringPositionCount; // Angle for each position in the ring
+                Vector3 ringVector = Quaternion.Euler(0, Mathf.Rad2Deg * angle, 0) * new Vector3(ringSize * (ring + 1), 0, 0);
+                Vector3 ringPosition = center + ringVector;
+
+                if (currentIndex == positionIndex)
+                {
+                    return ringPosition; // Return the position at the specified index
+                }
+
+                currentIndex++;
+                if (currentIndex >= positionCount)
+                {
+                    break;
+                }
+            }
+
+            ring++;
+        }
+
+        return center; // Fallback to the center if no position is found
+    }
     private int getRandomUnitType()
     {
-        int randomIndex = Random.Range(0, LevelManager.instance.units.Length);
+        int randomIndex = UnityEngine.Random.Range(0, LevelManager.instance.units.Length);
         return randomIndex;
+    }
+    public void GoToMainMenu(){
+        //Return Obj back to pool 
+        for(int i=0; i<enemyUnits.Length; i++){
+            PoolObject.SharedInstance.ReturnPooledObject(enemyUnits[i].gameObject);
+        }
+        for(int i=0; i<playerTeamMateUnits.Length; i++){
+            PoolObject.SharedInstance.ReturnPooledObject(playerTeamMateUnits[i].gameObject);
+        }
+        Destroy(playerUnits.gameObject.GetComponent<PlayerInputController>());
+        playerUnits.gameObject.GetComponent<AIController>().enabled = true;
+        PoolObject.SharedInstance.ReturnPooledObject(playerUnits.gameObject);
+        gameState = GameState.Waiting;
+        SceneManager.LoadScene("MainScene");
+    }
+    public void CheckGameOver(){
+        if(playerUnits.gameObject.activeSelf == false){
+            foreach(Unit unit in playerTeamMateUnits){
+                if(unit.gameObject.activeSelf == true){
+                    return;
+                }
+            }
+            OnResultEvent?.Invoke(this, false);
+        }else{
+            foreach(Unit unit in enemyUnits){
+                if(unit.gameObject.activeSelf == true){
+                    return;
+                }
+            }
+            OnResultEvent?.Invoke(this, true);
+        }
     }
 }

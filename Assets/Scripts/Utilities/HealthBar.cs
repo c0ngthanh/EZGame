@@ -14,11 +14,13 @@ public class HealthBar : MonoBehaviour
         unit.onUnitAttacked += UpdateHealthBar;
         gameObject.SetActive(false);
     }
-
     private void UpdateHealthBar(object sender, float e)
     {
         if(gameObject.activeSelf == false){
             gameObject.SetActive(true);
+        }
+        if(e == 1){
+            gameObject.SetActive(false);
         }
         healthBarVisual.transform.localScale = new Vector3(e, healthBarVisual.transform.localScale.y, healthBarVisual.transform.localScale.z);
     }

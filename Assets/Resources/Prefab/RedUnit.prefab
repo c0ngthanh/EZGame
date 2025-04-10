@@ -44,6 +44,10 @@ PrefabInstance:
       propertyPath: Speed
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1753287134104261802, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
+      propertyPath: attackRange
+      value: 
+      objectReference: {fileID: 1892142678729780907}
     - target: {fileID: 2372170430208631866, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -249,3 +253,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
+--- !u!135 &1892142678729780907 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 4835250763649461423, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
+  m_PrefabInstance: {fileID: 6438035641405555204}
+  m_PrefabAsset: {fileID: 0}

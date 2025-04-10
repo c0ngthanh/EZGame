@@ -39,7 +39,7 @@ public class PoolObject : MonoBehaviour
     }
     public GameObject GetPooledObject(Faction faction)
     {
-        for(int i = 0; i < amountToPool; i++)
+        for(int i = 0; i < amountToPool*objectToPool.Count; i++)
         {
             if(!pooledObjects[i].activeInHierarchy && pooledObjects[i].GetComponent<Unit>().faction == faction)
             {
@@ -47,5 +47,10 @@ public class PoolObject : MonoBehaviour
             }
         }
         return null;
+    }
+    public void ReturnPooledObject(GameObject obj)
+    {
+        obj.SetActive(false);
+        obj.transform.SetParent(transform);
     }
 }

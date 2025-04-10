@@ -116,6 +116,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 2970787681223179924}
+    - target: {fileID: 1753287134104261802, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
+      propertyPath: attackRange
+      value: 
+      objectReference: {fileID: 3227820942436878167}
     - target: {fileID: 3722812025675102183, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
       propertyPath: m_Name
       value: BlueUnit
@@ -184,6 +188,11 @@ PrefabInstance:
 --- !u!4 &2234498504333785419 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8129925818369675955, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
+  m_PrefabInstance: {fileID: 8057437778440842232}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &3227820942436878167 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 4835250763649461423, guid: c722c324848c68d4f9b01149f8a7851d, type: 3}
   m_PrefabInstance: {fileID: 8057437778440842232}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8612335646067621714 stripped

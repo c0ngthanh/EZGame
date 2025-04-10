@@ -21,22 +21,30 @@ public class UnitAttackState : UnitBaseState
     }
     public void DealDamage(Unit unit)
     {
-        Vector3 boxCenter = unit.transform.TransformPoint(unit.attackRange.center);
-        Vector3 boxSize = unit.attackRange.size / 2;
-        Quaternion boxRotation = Quaternion.Euler(0, unit.transform.eulerAngles.y, 0);
+        // Collider[] colliders =  Physics.OverlapBox(transform.TransformPoint(attackRange.transform.position), attackRange.size/2, Quaternion.identity,LayerMask.GetMask("Unit"));
+        Vector3 boxCenter = unit.attackRange.transform.TransformPoint(unit.attackRange.center);
+        float radius = unit.attackRange.radius;
+        // Vector3 boxSize = attackRange.size / 2;
+        // Quaternion boxRotation = attackRange.transform.rotation;
+        // Debug.Log(boxCenter + " " + boxSize + " " + boxRotation);
+
 
         // Perform the OverlapBox check
-        Collider[] colliders = Physics.OverlapBox(
+        Collider[] colliders = Physics.OverlapSphere(
             boxCenter,
-            boxSize,
-            boxRotation,
+            radius,
             LayerMask.GetMask("Unit")
         );
         foreach (Collider collider in colliders)
         {
-            if (collider.gameObject != unit.gameObject)
+            if (collider.gameObject != unit.gameObject && collider.TryGetComponent<Unit>(out Unit checkUnit))
             {
-                collider.gameObject.GetComponent<Unit>().OnReceiveDamege(unit.Damage);
+                if (checkUnit.faction != unit.faction)
+                {
+                    // Debug.Log("Hit " + collider.gameObject.name);
+                    // Apply damage to the enemy unit
+                    collider.gameObject.GetComponent<Unit>().OnReceiveDamege(unit.Damage);
+                }
             }
         }
     }

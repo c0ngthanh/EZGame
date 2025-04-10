@@ -10,12 +10,13 @@ public class AIController : MonoBehaviour
     private float min;
     [SerializeField] Unit target;
     private Unit unit;
-    private float attackRange;
+    // private float attackRange;
 
     void Start()
     {
         unit = GetComponent<Unit>();
-        attackRange = unit.attackRange.size.z / 2;
+        // attackRange = unit.attackRange.size.z / 2;
+        // SetDefaultDirection();
     }
 
     void Update()
@@ -37,16 +38,23 @@ public class AIController : MonoBehaviour
             unit.SwitchState(unit.unitIdleState);
             return;
         }
-        if(!unit.CheckIfCanAttack() && unit.GetCurrentState() == unit.unitIdleState){
+        if (!unit.CheckIfCanAttack() && unit.GetCurrentState() == unit.unitIdleState)
+        {
             unit.SwitchState(unit.unitMoveState);
             SetDirection();
         }
     }
-    private void SetDirection(){
-        if(target != null){
+    // private void SetDefaultDirection()
+    // {
+    //     unit.SetDirection(transform.rotation * Vector3.forward);
+    // }
+    private void SetDirection()
+    {
+        if (target != null)
+        {
             unit.SetDirection((target.transform.position - transform.position).normalized);
         }
-        Debug.Log(unit.GetCurrentState());
+        // Debug.Log(unit.GetCurrentState());
     }
     void FindClosestUnit()
     {
@@ -56,13 +64,20 @@ public class AIController : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (collider.gameObject != gameObject)
+            if (collider.gameObject != gameObject && collider.TryGetComponent<Unit>(out Unit unit))
             {
-                float distance = GetDistanceSquare(transform.position, collider.transform.position);
-                if (distance < min)
+                if (unit.faction == this.unit.faction)
                 {
-                    min = distance;
-                    target = collider.GetComponent<Unit>();
+                    continue;
+                }
+                else
+                {
+                    float distance = GetDistanceSquare(transform.position, collider.transform.position);
+                    if (distance < min)
+                    {
+                        min = distance;
+                        target = collider.GetComponent<Unit>();
+                    }
                 }
             }
         }
